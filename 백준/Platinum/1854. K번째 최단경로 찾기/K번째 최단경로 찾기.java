@@ -17,28 +17,26 @@ public class Main {
     }
 
     static void savePath() {
-        PriorityQueue<int[]> pq = new PriorityQueue<>((a, b) -> (a[1] - b[1]));
-        pq.add(new int[]{1, 0});
+        PriorityQueue<Vertex> pq = new PriorityQueue<>((a, b) -> (a.weight - b.weight));
+        pq.add(new Vertex(1, 0));
 
         while (!pq.isEmpty()) {
-            int[] info = pq.poll();
-            int curr = info[0];
-            int weight = info[1];
+            Vertex curr = pq.poll();
 
-            if (nodePaths.get(curr).size() < K) {
-                nodePaths.get(curr).add(weight);
+            if (nodePaths.get(curr.to).size() < K) {
+                nodePaths.get(curr.to).add(curr.weight);
             } else {
-                if (nodePaths.get(curr).peek() > weight) {
-                    nodePaths.get(curr).poll();
-                    nodePaths.get(curr).add(weight);
+                if (nodePaths.get(curr.to).peek() > curr.weight) {
+                    nodePaths.get(curr.to).poll();
+                    nodePaths.get(curr.to).add(curr.weight);
                 } else {
                     continue;
                 }
             }
 
-            for (Vertex vertex : adjList.get(curr)) {
-                if (nodePaths.get(vertex.to).size() < K || nodePaths.get(vertex.to).peek() > vertex.weight + weight)
-                    pq.add(new int[]{vertex.to, vertex.weight + weight});
+            for (Vertex vertex : adjList.get(curr.to)) {
+                if (nodePaths.get(vertex.to).size() < K || nodePaths.get(vertex.to).peek() > vertex.weight + curr.weight)
+                    pq.add(new Vertex(vertex.to, vertex.weight + curr.weight));
             }
         }
     }
@@ -66,9 +64,10 @@ public class Main {
 
         savePath();
         for (int i = 1; i <= N; i++) {
-            if (nodePaths.get(i).size() < K) System.out.println(-1);
-            else System.out.println(nodePaths.get(i).peek());
+            if (nodePaths.get(i).size() < K) sb.append(-1 + "\n");
+            else sb.append(nodePaths.get(i).peek() + "\n");
         }
+        System.out.println(sb.toString());
     }
 
 }
