@@ -37,7 +37,8 @@ public class Main {
             }
 
             for (Vertex vertex : adjList.get(curr)) {
-                pq.add(new int[]{vertex.to, vertex.weight + weight});
+                if (nodePaths.get(vertex.to).size() < K || nodePaths.get(vertex.to).peek() > vertex.weight + weight)
+                    pq.add(new int[]{vertex.to, vertex.weight + weight});
             }
         }
     }
