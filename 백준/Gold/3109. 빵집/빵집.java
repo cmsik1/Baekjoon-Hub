@@ -11,7 +11,7 @@ public class Main {
         int count = 0;
 
         for (int r = 0; r < R; r++) {
-            if (setPipeline(r, 0) == 'X') {
+            if (setPipeline(r, 0)) {
                 count++;
             }
         }
@@ -19,11 +19,11 @@ public class Main {
         return count;
     }
 
-    static char setPipeline(int r, int c) {
+    static boolean setPipeline(int r, int c) {
         map[r][c] = 'X';
 
         if (c == C - 1) {
-            return 'X';
+            return true;
         }
 
         for (int i = 0; i < 3; i++) {
@@ -31,13 +31,13 @@ public class Main {
             int nc = c + 1;
 
             if (0 <= nr && nr < R && map[nr][nc] == '.') {
-                if (setPipeline(nr, nc) == 'X') {
-                    return 'X';
+                if (setPipeline(nr, nc)) {
+                    return true;
                 }
             }
         }
 
-        return '.';
+        return false;
     }
 
     public static void main(String[] args) throws IOException {
